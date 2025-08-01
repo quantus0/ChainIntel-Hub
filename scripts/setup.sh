@@ -6,7 +6,6 @@ echo "Setting up ChainIntel Hub environment..."
 julia --project=. -e 'using Pkg; Pkg.instantiate()'
 
 # Install Node.js dependencies
-cd src/ui
 npm install
 
 echo "Setup complete!"
