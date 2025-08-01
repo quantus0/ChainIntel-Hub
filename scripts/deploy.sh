@@ -6,6 +6,6 @@ echo "Deploying ChainIntel Hub..."
 docker build -t chainintel-hub .
 
 # Run container
-docker run -d -p 8080:8080 chainintel-hub
+docker run -d -p 3000:3000 -p 8080:8080 chainintel-hub
 
 echo "Deployment complete!"
