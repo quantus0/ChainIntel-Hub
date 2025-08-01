@@ -1,15 +1,17 @@
 module Reporter
 
 using JuliaOS
+using Observables
 
 mutable struct ReporterAgent
     agent::Agent
+    reports::Observable{Vector{String}}
 end
 
 function init_reporter()
     llm_config = LLMConfig(model="gpt-4", temperature=0.3)
     agent = Agent(name="ReportGenerator", llm_config=llm_config)
-    ReporterAgent(agent)
+    ReporterAgent(agent, Observable(String[]))
 end
 
 function generate_report(reporter::ReporterAgent, analyses)
@@ -20,8 +22,15 @@ function generate_report(reporter::ReporterAgent, analyses)
     - List risks
     Analyses: $analyses
     """
-    response = reporter.agent.useLLM(prompt, temperature=0.2)
-    return parse_report(response)
+    try
+        response = reporter.agent.useLLM(prompt, temperature=0.2)
+        report = parse_report(response)
+        push!(reporter.reports[], report)
+        return report
+    catch e
+        push!(reporter.reports[], "Error: $(string(e))")
+        return "Error: $(string(e))"
+    end
 end
 
 end
