@@ -13,3 +13,4 @@ npm-debug.log
 .DS_Store
 *.log
 *.env
+arbitrage_plot.png
